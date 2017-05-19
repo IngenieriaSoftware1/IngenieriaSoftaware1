@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>El Salado</title>
+	<script type="text/javascript" src="js/phaser.min.js">
+	</script>
+</head>
+<body>
+	<script type="text/javascript">
+        
+        var paramilitares;
+		var juego= new Phaser.Game(1024, 768, Phaser.AUTO,"Elsalado",{preload: preload,create: create,update: update});
+        
+		function preload() {
+                
+				juego.load.image("fondo","assets/fondo.png");
+                juego.load.image("paramilitar","assets/paradisparo1.png");
+			}
+			
+        function create() {
+			
+            juego.add.sprite(0, 0, "fondo");
+            
+            //juego.add.sprite(400,100, "paramilitar");
+            
+                paramilitares.juego.add.group();
+                paramilitares.enableBody=true;
+                paramilitares.physicsBodyType=Phaser.Physics.ARCADE;
+            
+        
+            for(var i =0; i < 10; i++) {
+                
+                var paramilitar = paramilitares.create(100 + i * 50, 50, "paramilitar");
+            }
+            
+			}
+			
+        function update() {
+                //Aqui se ejecutara algo
+	
+			}
+	</script>
+
+</body>
+</html>
