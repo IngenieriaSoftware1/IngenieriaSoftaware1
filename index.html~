@@ -24,9 +24,9 @@
             
             //juego.add.sprite(400,100, "paramilitar");
             
-            paramilitares.juego.add.group();
-            paramilitares.enableBody=true;
-            paramilitares.physicsBodyType=Phaser.Physics.ARCADE;
+                paramilitares.juego.add.group();
+                paramilitares.enableBody=true;
+                paramilitares.physicsBodyType=Phaser.Physics.ARCADE;
             
         
             for(var i =0; i < 10; i++) {
