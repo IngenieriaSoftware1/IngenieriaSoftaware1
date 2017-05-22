@@ -9,36 +9,113 @@
 <body>
 	<script type="text/javascript">
         
-        var paramilitares;
+      var paramilitares;
+      var plataformas;
+      var reportero;
+      var controles;
+      var score = 0;
+      var textoScore;
+      
+      
 		var juego= new Phaser.Game(1024, 768, Phaser.AUTO,"Elsalado",{preload: preload,create: create,update: update});
+		
         
 		function preload() {
                 
 				juego.load.image("fondo","assets/fondo.png");
-                juego.load.image("paramilitar","assets/paradisparo1.png");
+            juego.load.image("paramilitar","assets/diamond.png");
+            juego.load.image("barra","assets/piso.png");
+            juego.load.spritesheet("reportero", "assets/sprites/reporteroCorrer1.png", 32, 68);
 			}
 			
         function create() {
+				
+			juego.physics.startSystem(Phaser.Physics.ARCADE);
 			
-            juego.add.sprite(0, 0, "fondo");
-            
-            //juego.add.sprite(400,100, "paramilitar");
-            
-            paramilitares.juego.add.group();
-            paramilitares.enableBody=true;
-            paramilitares.physicsBodyType=Phaser.Physics.ARCADE;
-            
-        
-            for(var i =0; i < 10; i++) {
-                
-                var paramilitar = paramilitares.create(100 + i * 50, 50, "paramilitar");
-            }
-            
+								
+			//Aqui se agrega el fondo. 
+			juego.add.sprite(0, 0, 'fondo'); 
+			
+			plataformas = juego.add.group();
+			plataformas.enableBody = true;
+						
+					
+			var piso = plataformas.create(0, juego.world.height - 64,'barra');
+			piso.scale.setTo(2, 2);
+			piso.body.immovable = true;
+			
+			var barra = plataformas.create(-280, 300, 'barra');
+			barra.body.immovable = true;
+			
+			barra = plataformas.create(500, 500, 'barra');
+			barra.body.immovable = true;
+			
+			barra = plataformas.create(200, 150, 'barra');
+			barra.body.immovable = true;
+			
+			//Agregar reportero
+			reportero = juego.add.sprite(0, juego.world.height - 160,"reportero");
+			juego.physics.arcade.enable(reportero);
+			reportero.body.bounce.y=0.3;
+			reportero.body.gravity.y = 300;
+			reportero.body.collideWorldBounds = true;
+			
+			reportero.animations.add("izquierda", [0,1,2,3],10,true);
+			reportero.animations.add("derecha", [4,5,6,7],10,true);
+						
+			//Agregar paramilitares
+			paramilitares = juego.add.group();
+			paramilitares.enableBody = true;
+			
+			for (var i = 0; i < 40; i++) {
+				var paramilitar = paramilitares.create(50 + i * 55, 0, 'paramilitar');
+				paramilitar.body.collideWorldBounds = true;
+				paramilitar.body.gravity.x = juego.rnd.integerInRange(-50, 50);
+				paramilitar.body.gravity.y = 100 + Math.random() * 100;
+				
+				paramilitar.body.bounce.setTo(1);
+			}
+			
+			textoScore= juego.add.text(20,20, "Marcador: 0",{fontSize:"40px", fill: "#fff"});
+			controles= juego.input.keyboard.createCursorKeys();
 			}
 			
         function update() {
-                //Aqui se ejecutara algo
-	
+        			
+        			
+                  
+               juego.physics.arcade.collide(paramilitares,plataformas);
+               juego.physics.arcade.collide(reportero,plataformas);
+               juego.physics.arcade.collide(paramilitares,paramilitares);
+               
+              
+               
+               juego.physics.arcade.overlap(reportero,paramilitares, colision, null, this);
+               
+               reportero.body.velocity.x=0;
+               
+               if (controles.left.isDown) {
+               	reportero.body.velocity.x=-150;
+               	reportero.animations.play("izquierda");
+               	}
+               else if (controles.right.isDown) {
+               	reportero.body.velocity.x=150;
+               	reportero.animations.play("derecha");
+               	}
+               else {
+               	reportero.animations.stop();
+               	reportero.frame=1;
+               }
+               if (controles.up.isDown && reportero.body.touching.down) {
+               	reportero.body.velocity.y=-600;
+               	
+               }
+			}
+			function colision (repo, para) {
+			para.kill();
+			score +=10;
+			textoScore.text= "Marcador: "+ score;
+				
 			}
 	</script>
 
