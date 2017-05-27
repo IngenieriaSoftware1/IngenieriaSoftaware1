@@ -100,9 +100,19 @@ Boot = {
 			},
 
 			colision1: function(repo, para) {
+
+			 if (score >= 400) {
+
+            	juego.state.add('Historia', Historia);	
+	        	juego.state.start('Historia');
+			}
+            
+               else {
+
+               	textoScore.text= " Para conocer la historia debe recoger todos los diamantes: "+ score;
+
+               	}
 			
-			juego.state.add('Historia', Historia);	
-	        juego.state.start('Historia');
 			
 				
 			},
